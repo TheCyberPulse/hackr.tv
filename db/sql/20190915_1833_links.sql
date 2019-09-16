@@ -1,0 +1,9 @@
+CREATE TABLE links (
+  id SERIAL PRIMARY KEY,
+  shortcode VARCHAR(10) NOT NULL,
+  url VARCHAR (255) NOT NULL,
+  active BOOL DEFAULT 't' NOT NULL,
+  deleted_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL
+);
