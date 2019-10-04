@@ -3,6 +3,7 @@ require 'pg'
 require 'securerandom'
 load 'lib/hackr_link.rb'
 HackrLink::init
+configure { set :server, :puma }
 
 module HackrLink
   class Server < Sinatra::Base
