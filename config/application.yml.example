@@ -4,3 +4,14 @@ database:
   username: 'root'
   password: ''
   name: 'api_database'
+
+authentication:
+  ryker:
+    username: 'r'
+    password: 'zxcvzxcv'
+  xeraen:
+    username: 'x'
+    password: 'asdfasdf'
+
+system:
+  domain: 'hackr.link'
