@@ -12,14 +12,6 @@ module HackrLink
 
     set :root, "#{File.dirname(__FILE__)}"
 
-    db = PG.connect(
-      :host => HackrLink::Config['database']['host'],
-      :port => HackrLink::Config['database']['port'],
-      :dbname => HackrLink::Config['database']['name'],
-      :user => HackrLink::Config['database']['username'],
-      :password => HackrLink::Config['database']['password']
-    )
-
     User = Struct.new(:id, :username, :password)
     USERS = [
       User.new(1, HackrLink::Config['authentication']['ryker']['username'], HackrLink::Config['authentication']['ryker']['password']),
@@ -103,6 +95,19 @@ module HackrLink
     end
 
     helpers do
+      def db
+        connection = PG.connect(
+          :host => HackrLink::Config['database']['host'],
+          :port => HackrLink::Config['database']['port'],
+          :dbname => HackrLink::Config['database']['name'],
+          :user => HackrLink::Config['database']['username'],
+          :password => HackrLink::Config['database']['password']
+        )
+        yield connection
+      ensure
+        connection.close
+      end
+
       def current_user
         return nil unless session[:user_id]
         USERS.find { |u| u.id == session[:user_id] }
