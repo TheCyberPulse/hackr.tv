@@ -12,8 +12,6 @@ module HackrLink
 
     set :root, "#{File.dirname(__FILE__)}"
 
-    @db = false
-
     User = Struct.new(:id, :username, :password)
     USERS = [
       User.new(1, HackrLink::Config['authentication']['ryker']['username'], HackrLink::Config['authentication']['ryker']['password']),
@@ -54,13 +52,13 @@ module HackrLink
 
       select_sql = "SELECT * FROM links WHERE url IS NULL OR url = '' LIMIT 1;";
       query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
-      db.prepare query_name, select_sql
-      record = db.exec_prepared(query_name, []).first
+      @db.prepare query_name, select_sql
+      record = @db.exec_prepared(query_name, []).first
 
       update_sql = 'UPDATE links SET url = $1 WHERE id = $2;'
       query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
-      db.prepare query_name, update_sql
-      result = db.exec_prepared(query_name, [new_link_url, record['id'].to_i])
+      @db.prepare query_name, update_sql
+      result = @db.exec_prepared(query_name, [new_link_url, record['id'].to_i])
 
       if result
         url = "https://#{HackrLink::Config['system']['domain']}/#{record['shortcode']}"
@@ -87,8 +85,8 @@ module HackrLink
       unless token.empty?
         sql = 'SELECT * FROM links WHERE shortcode = $1;';
         query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
-        db.prepare query_name, sql
-        result = db.exec_prepared(query_name, [token])
+        @db.prepare query_name, sql
+        result = @db.exec_prepared(query_name, [token])
         url = result.first['url'].to_s if result.count.positive?
         redirect_url = url if url.present?
       end
@@ -97,11 +95,25 @@ module HackrLink
     end
 
     ##########################################################################
+    # BEFORE Filter
+    ##########################################################################
+
+    before do
+      @db = PG.connect(
+        :host => HackrLink::Config['database']['host'],
+        :port => HackrLink::Config['database']['port'],
+        :dbname => HackrLink::Config['database']['name'],
+        :user => HackrLink::Config['database']['username'],
+        :password => HackrLink::Config['database']['password']
+      )
+    end
+
+    ##########################################################################
     # AFTER Filter
     ##########################################################################
 
     after do
-      close_db
+      @db.close unless @db == false
     end
 
     ##########################################################################
@@ -112,22 +124,6 @@ module HackrLink
       def current_user
         return nil unless session[:user_id]
         USERS.find { |u| u.id == session[:user_id] }
-      end
-
-      def db
-        return @db unless @db == false # ensure singleton db
-        @db = PG.connect(
-          :host => HackrLink::Config['database']['host'],
-          :port => HackrLink::Config['database']['port'],
-          :dbname => HackrLink::Config['database']['name'],
-          :user => HackrLink::Config['database']['username'],
-          :password => HackrLink::Config['database']['password']
-        )
-        @db
-      end
-
-      def close_db
-        @db.close unless @db == false
       end
     end
   end
