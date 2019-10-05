@@ -12,6 +12,8 @@ module HackrLink
 
     set :root, "#{File.dirname(__FILE__)}"
 
+    @db = false
+
     User = Struct.new(:id, :username, :password)
     USERS = [
       User.new(1, HackrLink::Config['authentication']['ryker']['username'], HackrLink::Config['authentication']['ryker']['password']),
@@ -94,23 +96,38 @@ module HackrLink
       redirect redirect_url
     end
 
+    ##########################################################################
+    # AFTER Filter
+    ##########################################################################
+
+    after do
+      close_db
+    end
+
+    ##########################################################################
+    # Helpers
+    ##########################################################################
+
     helpers do
+      def current_user
+        return nil unless session[:user_id]
+        USERS.find { |u| u.id == session[:user_id] }
+      end
+
       def db
-        connection = PG.connect(
+        return @db unless @db == false # ensure singleton db
+        @db = PG.connect(
           :host => HackrLink::Config['database']['host'],
           :port => HackrLink::Config['database']['port'],
           :dbname => HackrLink::Config['database']['name'],
           :user => HackrLink::Config['database']['username'],
           :password => HackrLink::Config['database']['password']
         )
-        connection
-      ensure
-        connection.close
+        @db
       end
 
-      def current_user
-        return nil unless session[:user_id]
-        USERS.find { |u| u.id == session[:user_id] }
+      def close_db
+        @db.close unless @db == false
       end
     end
   end
