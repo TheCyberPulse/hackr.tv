@@ -88,7 +88,7 @@ module HackrLink
 
     get '/:token?' do
       redirect_url = 'http://The.CyberPul.se'
-      token = params[:token].to_s
+      token = params[:token].to_s.downcase # make case-insensitive
 
       unless token.empty?
         sql = 'SELECT * FROM links WHERE shortcode = $1;';
