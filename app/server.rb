@@ -103,7 +103,7 @@ module HackrLink
           :user => HackrLink::Config['database']['username'],
           :password => HackrLink::Config['database']['password']
         )
-        yield connection
+        connection
       ensure
         connection.close
       end
