@@ -46,12 +46,6 @@ values = ['twitter', 'https://twitter.com/TheCyberPulse']
 db.prepare query_name, sql
 db.exec_prepared query_name, values
 
-# hackr.link/twitter
-query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
-values = ['twitter', 'https://twitter.com/TheCyberPulse']
-db.prepare query_name, sql
-db.exec_prepared query_name, values
-
 # hackr.link/instagram
 query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
 values = ['instagram', 'https://instagram.com/TheCyberPulse']
