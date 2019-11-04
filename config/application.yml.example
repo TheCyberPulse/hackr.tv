@@ -14,4 +14,4 @@ authentication:
     password: 'asdfasdf'
 
 system:
-  domain: 'hackr.link'
+  domain: 'hackr.tv'

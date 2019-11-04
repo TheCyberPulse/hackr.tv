@@ -28,43 +28,43 @@ permutations.each do |permutation|
   end
 end
 
-# hackr.link/yt
+# hackr.tv/yt
 query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
 values = ['yt', 'https://youtube.com/channel/UCU6TswZ2C-QJ3jgf5ujhHNw']
 db.prepare query_name, sql
 db.exec_prepared query_name, values
 
-# hackr.link/youtube
+# hackr.tv/youtube
 query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
 values = ['youtube', 'https://youtube.com/channel/UCU6TswZ2C-QJ3jgf5ujhHNw']
 db.prepare query_name, sql
 db.exec_prepared query_name, values
 
-# hackr.link/twitter
+# hackr.tv/twitter
 query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
 values = ['twitter', 'https://twitter.com/TheCyberPulse']
 db.prepare query_name, sql
 db.exec_prepared query_name, values
 
-# hackr.link/instagram
+# hackr.tv/instagram
 query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
 values = ['instagram', 'https://instagram.com/TheCyberPulse']
 db.prepare query_name, sql
 db.exec_prepared query_name, values
 
-# hackr.link/ig
+# hackr.tv/ig
 query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
 values = ['ig', 'https://instagram.com/TheCyberPulse']
 db.prepare query_name, sql
 db.exec_prepared query_name, values
 
-# hackr.link/xeraen
+# hackr.tv/xeraen
 query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
 values = ['xeraen', 'http://xeraen.com']
 db.prepare query_name, sql
 db.exec_prepared query_name, values
 
-# hackr.link/x
+# hackr.tv/x
 query_name = "#{Time.now.to_i}-#{SecureRandom.uuid}"
 values = ['x', 'http://xeraen.com']
 db.prepare query_name, sql

@@ -75,7 +75,7 @@ module HackrLink
     end
 
     ##########################################################################
-    # Actual hackr.link Functionality
+    # Actual hackr.tv Functionality
     ##########################################################################
 
     get '/:token?' do
