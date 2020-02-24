@@ -80,6 +80,7 @@ module HackrLink
 
     get '/:token?' do
       redirect_url = 'http://The.CyberPul.se'
+      redirect_url = 'http://hackr.tv/xeraen' if request.host == 'xeraen.com'
       token = params[:token].to_s.downcase # make case-insensitive
 
       unless token.empty?
