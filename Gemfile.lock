@@ -31,7 +31,7 @@ GEM
     net-ssh (5.2.0)
     nio4r (2.5.2)
     pg (1.1.4)
-    puma (4.2.0)
+    puma (4.3.3)
       nio4r (~> 2.0)
     rack (2.0.8)
     rack-protection (2.0.7)
@@ -61,7 +61,7 @@ DEPENDENCIES
   capistrano-passenger (~> 0.2.0)
   capistrano-rbenv (~> 2.1.4)
   pg (~> 1.1.4)
-  puma (~> 4.2.0)
+  puma (~> 4.3.3)
   sinatra (~> 2.0.5)
 
 RUBY VERSION
