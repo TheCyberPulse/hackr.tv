@@ -1,6 +1,6 @@
+require 'fileutils'
 require 'rake'
 require 'slim'
-require 'fileutils'
 
 desc 'Generate Site'
 task :generate do |t|
@@ -12,7 +12,7 @@ task :generate do |t|
 
   public_dir_name = 'public'
   public_backup_dir = "#{public_dir_name}_backup"
-  content_dirs = ['pages']
+  content_dirs = ['pages', 'redirects']
 
   if Dir.exist?(public_dir_name)
     if Dir.exist?(public_backup_dir)
@@ -32,6 +32,9 @@ task :generate do |t|
   Dir.mkdir public_dir_name
   FileUtils.cp_r './assets', public_dir_name
 
+  page_template = Slim::Template.new('layout/template.slim').render
+  redirect_template = File.read('layout/redirect.php')
+
   content_dirs.each do |dir|
 
     puts '|=========================================='
@@ -50,9 +53,7 @@ task :generate do |t|
 
       post_content = Slim::Template.new(filepath).render || ''
 
-      post = Slim::Template
-        .new('layout/template.slim')
-        .render
+      post = page_template
         .gsub('<!--~~~POST_CONTENT_PLACEHOLDER~~~-->', post_content)
 
       post_name_directory = "#{public_dir_name}/#{context_path}"
@@ -62,6 +63,30 @@ task :generate do |t|
       end
 
       File.write("#{post_name_directory}/index.html", post)
+    end
+
+    Dir.glob("#{dir}/**/*.redirect").each do |filepath|
+
+      context_path = filepath
+        .split("#{dir}/")[1]
+        .to_s
+        .gsub('.redirect', '')
+
+
+      redirect_content = File.read(filepath)
+
+      # The second gsub is to prevent an unwanted newline.
+      redirect = redirect_template
+        .gsub('<~~~REDIRECT_URL~~~>', redirect_content)
+        .gsub("\n\"",'"')
+
+      redirect_name_directory = "#{public_dir_name}/#{context_path}"
+
+      unless File.directory? redirect_name_directory
+        FileUtils.mkdir_p(redirect_name_directory)
+      end
+
+      File.write("#{redirect_name_directory}/index.php", redirect)
     end
   end
 
